@@ -713,14 +713,14 @@ public final class Emitter {
       println("     this.symbolFactory = symbolFactory;");
       println("  }");
 
-      println("  private Symbol symbol(Sym symbol) {");
+      println("  private Symbol symbol(ETerminal symbol) {");
       println(
           "     AdvancedSymbolFactory.Location left = new AdvancedSymbolFactory.Location (yyline+1,yycolumn+1-yylength());");
       println(
           "     AdvancedSymbolFactory.Location right = new AdvancedSymbolFactory.Location (yyline+1,yycolumn+1);");
       println("	  return symbolFactory.newSymbol(symbol, left, right);");
       println("  }");
-      println("  private Symbol symbol(Sym symbol, Object lexem)		{");
+      println("  private Symbol symbol(ETerminal symbol, Object lexem)		{");
       println(
           "     AdvancedSymbolFactory.Location left = new AdvancedSymbolFactory.Location (yyline+1,yycolumn+1);");
       println(
