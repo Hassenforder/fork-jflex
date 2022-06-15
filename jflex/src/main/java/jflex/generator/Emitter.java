@@ -736,7 +736,7 @@ public final class Emitter {
       println();
       println("/* CUP jhoenicke code to ease symbol building with full location*/");
       println("  private AdvancedSymbolFactory symbolFactory;");
-      println("  public void setComplexSymbolFactory (AdvancedSymbolFactory symbolFactory) {");
+      println("  public void setAdvancedSymbolFactory (AdvancedSymbolFactory symbolFactory) {");
       println("     this.symbolFactory = symbolFactory;");
       println("  }");
 
