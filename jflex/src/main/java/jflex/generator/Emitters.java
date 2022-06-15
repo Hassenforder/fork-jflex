@@ -38,15 +38,10 @@ public final class Emitters {
   public static Emitter createFileEmitter(File inputLexFile, LexParse parser, DFA dfa)
       throws IOException {
 
-    String fullName;
-    if (parser.scanner.packageName() == null || parser.scanner.packageName().isEmpty()) {
-      fullName = parser.scanner.className();
-    } else {
-      fullName = parser.scanner.packageName().replace(".", "/") + "/" + parser.scanner.className();
-    }
-    String name = Emitter.getBaseName(fullName) + ".java";
-
-    File outputFile = Emitter.normalize(name, inputLexFile);
+    String packageName = Emitter.getPackageName(parser);
+    String baseName = Emitter.getBaseName(parser.scanner.className()) + ".java";
+    String fullName = Emitter.getPathName(packageName, baseName);
+    File outputFile = Emitter.normalize(fullName, inputLexFile);
     String outputFileName = outputFile.getAbsolutePath();
 
     Out.println("Writing code to \"" + outputFile + "\"");

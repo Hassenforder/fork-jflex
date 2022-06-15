@@ -19,6 +19,7 @@ import java.nio.file.Files;
 import jflex.base.Build;
 import jflex.core.LexParse;
 import jflex.exceptions.GeneratorException;
+import jflex.generator.Emitter;
 import jflex.l10n.ErrorMessages;
 import jflex.option.Options;
 import jflex.performance.Timer;
@@ -75,26 +76,12 @@ public final class Out {
     out.setGUIMode(null);
   }
 
-  public static void createDumpFile(LexParse parser) {
+  public static void createDumpFile(LexParse parser, File input) {
     if (Options.dump && Options.dumpfile) {
-      String fullName;
-      if (parser.scanner.packageName() == null || parser.scanner.packageName().isEmpty()) {
-        fullName = parser.scanner.className();
-      } else {
-        fullName =
-            parser.scanner.packageName().replace(".", "/") + "/" + parser.scanner.className();
-      }
-      String name;
-      int gen = fullName.indexOf('<');
-      if (gen < 0) {
-        name = fullName + ".dump";
-      } else {
-        name = fullName.substring(0, gen) + ".dump";
-      }
-      File outputFile;
-      if (Options.getDir() == null) outputFile = new File(name);
-      else outputFile = new File(Options.getDir(), name);
-      outputFile.getParentFile().mkdirs();
+      String packageName = Emitter.getPackageName(parser);
+      String baseName = Emitter.getBaseName(parser.scanner.className()) + ".dump";
+      String fullName = Emitter.getPathName(packageName, baseName);
+      File outputFile = Emitter.normalize(fullName, input);
       try {
         dumpfile = new PrintWriter(outputFile);
         Out.println("Dumping tables to \"" + outputFile + "\"");

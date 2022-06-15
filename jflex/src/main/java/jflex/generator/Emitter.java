@@ -104,11 +104,38 @@ public final class Emitter {
   }
 
   /**
+   * Computes path of the generated file.
+   *
+   * @param packageName String name of the package or null
+   * @param className String name of class
+   */
+  public static String getPathName(String packageName, String className) {
+    if (packageName == null) {
+      return className;
+    } else {
+      return packageName.replace(".", "/") + "/" + className;
+    }
+  }
+
+  /**
+   * Computes package name of the generated class name.
+   *
+   * @param parser LexParse holding a set of values
+   */
+  public static String getPackageName(LexParse parser) {
+    if (parser.scanner.packageName() == null || parser.scanner.packageName().isEmpty()) {
+      return null;
+    } else {
+      return parser.scanner.packageName();
+    }
+  }
+
+  /**
    * Computes base name of the class name. Needs to take into account generics.
    *
    * @param className Class name for which to construct the base name
    */
-  static String getBaseName(String className) {
+  public static String getBaseName(String className) {
     int gen = className.indexOf('<');
     if (gen < 0) {
       return className;
