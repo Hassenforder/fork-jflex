@@ -174,6 +174,7 @@ public final class Emitter {
         Out.println("Old file \"" + outputFile + "\" saved as \"" + backup + "\"");
       else Out.println("Couldn't save old file \"" + outputFile + "\", overwriting!");
     }
+    Out.println("Writing code to \"" + outputFile + "\"");
 
     return outputFile;
   }

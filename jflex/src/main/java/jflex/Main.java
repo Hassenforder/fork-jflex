@@ -10,6 +10,8 @@
 package jflex;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +57,22 @@ public class Main {
     List<File> files = new ArrayList<>();
 
     for (int i = 0; i < argv.length; i++) {
+
+      // allow to redirect all messages to a file
+      if (Objects.equals(argv[i], "-o")
+          || Objects.equals(argv[i], "--out")) { // $NON-NLS-1$ //$NON-NLS-2$
+        if (++i >= argv.length) {
+          Out.error(ErrorMessages.CANNOT_OPEN);
+          throw new GeneratorException();
+        }
+        try {
+          Out.setOutputStream(new FileOutputStream(argv[i]));
+        } catch (FileNotFoundException e) {
+          Out.error(ErrorMessages.CANNOT_OPEN);
+          throw new GeneratorException();
+        }
+        continue;
+      }
 
       if (Objects.equals(argv[i], "-d")
           || Objects.equals(argv[i], "--outdir")) { // $NON-NLS-1$ //$NON-NLS-2$
