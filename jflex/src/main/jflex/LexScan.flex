@@ -217,6 +217,7 @@ DottedVersion =  [1-9][0-9]*(\.[0-9]+){0,2}
                                 populateDefaultVersionUnicodeProperties();
                                 initUnicodeCharClasses();
                               }
+  "%mode"{WSP}+("STD"|"MAP"){WSP}*     { Options.mode = Options.Mode.valueOf(yytext().substring(6).trim()); }
   "%cup2"                     { cup2Compatible = true;
                                 isImplementing = concExc(isImplementing, "Scanner");
                                 lineCount = true;

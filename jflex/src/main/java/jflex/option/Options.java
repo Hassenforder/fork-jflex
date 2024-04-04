@@ -62,6 +62,13 @@ public class Options {
   /** The encoding to use for input and output files. */
   public static Charset encoding;
 
+  public enum Mode {
+    STD,
+    MAP
+  }
+
+  public static Mode mode = Mode.STD;
+
   /** Prevent instantiation of static-only calss */
   // (to be changed to instances in thread-safety refactor)
   private Options() {}

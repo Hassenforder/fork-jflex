@@ -26,6 +26,7 @@ import jflex.exceptions.MacroException;
 import jflex.l10n.ErrorMessages;
 import jflex.logging.Out;
 import jflex.option.Options;
+import jflex.option.Options.Mode;
 import jflex.performance.Timer;
 import jflex.scanner.ScannerException;
 
@@ -133,6 +134,12 @@ public class LexGenerator {
 
       Emitter emitter = Emitters.createFileEmitter(inputFile, parser, dfa);
       emitter.emit();
+
+      if (Options.mode == Mode.MAP) {
+        MappingEmitter mappingEmitter = Emitters.createFileMappings(inputFile, parser, dfa, nfa);
+        mappingEmitter.emit();
+      }
+
       Out.closeDumpFile();
 
       time.stop();
