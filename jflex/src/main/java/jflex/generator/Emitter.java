@@ -743,12 +743,12 @@ public final class Emitter {
 
       println("  private Symbol symbol(ETerminal symbol) {");
       println(
-          "     AdvancedSymbolFactory.Location left = new AdvancedSymbolFactory.Location (yyline+1,yycolumn+1-yylength());");
+          "     AdvancedSymbolFactory.Location left = new AdvancedSymbolFactory.Location (yyline+1,yycolumn+1);");
       println(
-          "     AdvancedSymbolFactory.Location right = new AdvancedSymbolFactory.Location (yyline+1,yycolumn+1);");
+          "     AdvancedSymbolFactory.Location right = new AdvancedSymbolFactory.Location (yyline+1,yycolumn+yylength());");
       println("	  return symbolFactory.newSymbol(symbol, left, right);");
       println("  }");
-      println("  private Symbol symbol(ETerminal symbol, Object lexem)		{");
+      println("  private Symbol symbol(ETerminal symbol, Object lexem) {");
       println(
           "     AdvancedSymbolFactory.Location left = new AdvancedSymbolFactory.Location (yyline+1,yycolumn+1);");
       println(
