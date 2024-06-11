@@ -113,7 +113,7 @@ public final class MappingEmitter {
   private void emitAddMapping() {
     println("	private static void addMapping (ETerminal terminal, String text) {");
     println("		Set<String>	set;");
-    println("		if (! mappings.contains(terminal)) {");
+    println("		if (! mappings.containsKey(terminal)) {");
     println("			set = new TreeSet<String>();");
     println("			mappings.put(terminal, set);");
     println("		} else {");
@@ -123,7 +123,7 @@ public final class MappingEmitter {
     println("	}");
   }
 
-  private Pattern returnPattern = Pattern.compile(".*return symbol\\((ETerminal\\.[^,]*),.*");
+  private Pattern returnPattern = Pattern.compile(".*return symbol\\((ETerminal\\.[^,\\)]*).*");
 
   private Pattern textPattern = Pattern.compile("(.|\n|\r)*content :[ \\n\\r]*(.*)");
 
@@ -158,7 +158,7 @@ public final class MappingEmitter {
   }
 
   private void emitPublics() {
-    println("	public static String getTextFor (ETerminal symbol) {");
+    println("	public static Set<String> getTextFor (ETerminal symbol) {");
     println("		return getMappings().get(symbol);");
     println("	}");
   }
