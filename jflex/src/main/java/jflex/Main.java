@@ -10,6 +10,8 @@
 package jflex;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +57,22 @@ public class Main {
     List<File> files = new ArrayList<>();
 
     for (int i = 0; i < argv.length; i++) {
+
+      // allow to redirect all messages to a file
+      if (Objects.equals(argv[i], "-o")
+          || Objects.equals(argv[i], "--out")) { // $NON-NLS-1$ //$NON-NLS-2$
+        if (++i >= argv.length) {
+          Out.error(ErrorMessages.CANNOT_OPEN);
+          throw new GeneratorException();
+        }
+        try {
+          Out.setOutputStream(new FileOutputStream(argv[i]));
+        } catch (FileNotFoundException e) {
+          Out.error(ErrorMessages.CANNOT_OPEN);
+          throw new GeneratorException();
+        }
+        continue;
+      }
 
       if (Objects.equals(argv[i], "-d")
           || Objects.equals(argv[i], "--outdir")) { // $NON-NLS-1$ //$NON-NLS-2$
@@ -124,6 +142,20 @@ public class Main {
       if (Objects.equals(argv[i], "--dump")
           || Objects.equals(argv[i], "-dump")) { // $NON-NLS-1$ //$NON-NLS-2$
         Options.dump = true;
+        Options.dumpfile = false;
+        continue;
+      }
+
+      if (Objects.equals(argv[i], "--dumpfile")
+          || Objects.equals(argv[i], "-dumpfile")) { // $NON-NLS-1$ //$NON-NLS-2$
+        Options.dump = true;
+        Options.dumpfile = true;
+        continue;
+      }
+
+      if (Objects.equals(argv[i], "--noexit")
+          || Objects.equals(argv[i], "-noexit")) { // $NON-NLS-1$ //$NON-NLS-2$
+        Options.noexit = true;
         continue;
       }
 
@@ -350,9 +382,13 @@ public class Main {
       } else {
         Out.statistics();
       }
-      System.exit(1);
+      if (!Options.noexit) {
+        System.exit(1);
+      }
     } catch (SilentExit e) {
-      System.exit(e.exitCode());
+      if (!Options.noexit) {
+        System.exit(e.exitCode());
+      }
     }
   }
 

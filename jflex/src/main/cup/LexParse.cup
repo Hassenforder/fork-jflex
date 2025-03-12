@@ -459,7 +459,7 @@ specification ::=  USERCODE
                      charClasses.normalise();
                      if (Options.dump) charClasses.dump();
 
-                     Out.print("Constructing NFA : ");
+                     Out.println("Constructing NFA : ");
 
                      t.start();
                      int num = regExps.getNum();

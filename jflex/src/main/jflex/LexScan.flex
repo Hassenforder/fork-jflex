@@ -201,6 +201,23 @@ DottedVersion =  [1-9][0-9]*(\.[0-9]+){0,2}
                                   eofVal = "return 0;";
                                 eofclose = true;
                               }
+  "%cupJHMH"                  { cupJHMHCompatible = true;
+								cupSymbol="Sym";
+                                isImplementing = "com.github.jhoenicke.javacup.runtime.Scanner";
+                                lineCount = true;
+                                columnCount = true;
+                                if (functionName == null)
+                                  functionName = "next_token";
+                                if (tokenType == null)
+                                  tokenType = "Symbol";
+                                if (eofVal == null)
+                                  eofVal = "return symbol(ETerminal.EOF);";
+                                if (!Options.jlex) eofclose = true;
+                                // %unicode:
+                                populateDefaultVersionUnicodeProperties();
+                                initUnicodeCharClasses();
+                              }
+  "%mode"{WSP}+("STD"|"MAP"){WSP}*     { Options.mode = Options.Mode.valueOf(yytext().substring(6).trim()); }
   "%cup2"                     { cup2Compatible = true;
                                 isImplementing = concExc(isImplementing, "Scanner");
                                 lineCount = true;
@@ -232,6 +249,7 @@ DottedVersion =  [1-9][0-9]*(\.[0-9]+){0,2}
   "%cupdebug"                 { cupDebug = true; }
   "%eofclose"({WSP}+"true")?  { eofclose = true; }
   "%eofclose"({WSP}+"false")  { eofclose = false; }
+  "%package"{WSP}+{QualIdent} {WSP}*     { packageName = yytext().substring(9).trim();  }
   "%class"{WSP}+{ClassT} {WSP}*     { className = yytext().substring(7).trim();  }
   "%ctorarg"{WSP}+{ArrType}{WSP}+   { yybegin(CTOR_ARG); ctorTypes.add(yytext().substring(8).trim()); }
   "%function"{WSP}+{Ident} {WSP}*   { functionName = yytext().substring(10).trim(); }

@@ -50,11 +50,24 @@ public class Options {
   /** If true, you will be flooded with information (e.g. dfa tables). */
   public static boolean dump;
   /**
+   * If true, dump (above) will be redirect to a file near generated scanner with extension dump.
+   */
+  public static boolean dumpfile;
+  /** If true, main will not use exit method but just finish application without error code */
+  public static boolean noexit;
+  /**
    * If true, dot (.) metachar matches [^\n] instead of [^\r\n\u000B\u000C\u0085\u2028\u2029]|"\r\n"
    */
   public static boolean legacy_dot;
   /** The encoding to use for input and output files. */
   public static Charset encoding;
+
+  public enum Mode {
+    STD,
+    MAP
+  }
+
+  public static Mode mode = Mode.STD;
 
   /** Prevent instantiation of static-only calss */
   // (to be changed to instances in thread-safety refactor)

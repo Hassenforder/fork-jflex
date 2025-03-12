@@ -3,6 +3,17 @@
   <img alt="Bazel build status" src="https://api.cirrus-ci.com/github/jflex-de/jflex.svg" height="20">
 </a>
 
+# Fork of the original JFlex
+
+This project is a fork of the original jFlex library (https://github.com/jflex-de/jflex).
+This fork is to offer a better and full integration with ultimate-jcup (https://github.com/ultimate-pa/javacup)
+This fork will also be customized to be integrated in several plugings for eclipse they will be released in (https://github.com/Hassenforder?tab=repositories)
+
+Don't base any improvements on this fork unless you guess that you can benefit from my fork.
+You should better choose the original library at https://github.com/jflex-de/jflex
+
+Michel Hassenforder
+
 # JFlex
 
 [JFlex][jflex] is a lexical analyzer generator (also known as scanner generator) for Java.

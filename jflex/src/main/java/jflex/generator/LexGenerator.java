@@ -26,6 +26,7 @@ import jflex.exceptions.MacroException;
 import jflex.l10n.ErrorMessages;
 import jflex.logging.Out;
 import jflex.option.Options;
+import jflex.option.Options.Mode;
 import jflex.performance.Timer;
 import jflex.scanner.ScannerException;
 
@@ -75,9 +76,17 @@ public class LexGenerator {
 
       Out.checkErrors();
 
+      Out.createDumpFile(parser, inputFile);
+
       if (Options.dump) Out.dump(ErrorMessages.get(ErrorMessages.NFA_IS) + Out.NL + nfa + Out.NL);
 
-      if (Options.dot) nfa.writeDot(Emitter.normalize("nfa.dot", null)); // $NON-NLS-1$
+      if (Options.dot) {
+        String packageName = Emitter.getPackageName(parser);
+        String baseName = Emitter.getBaseName("nfa") + ".dot";
+        String fullName = Emitter.getPathName(packageName, baseName);
+        File outputFile = Emitter.normalize(fullName, inputFile);
+        nfa.writeDot(outputFile); // $NON-NLS-1$
+      }
 
       Out.println(ErrorMessages.NFA_STATES, nfa.numStates());
 
@@ -90,7 +99,13 @@ public class LexGenerator {
 
       if (Options.dump) Out.dump(ErrorMessages.get(ErrorMessages.DFA_IS) + Out.NL + dfa + Out.NL);
 
-      if (Options.dot) dfa.writeDot(Emitter.normalize("dfa-big.dot", null)); // $NON-NLS-1$
+      if (Options.dot) {
+        String packageName = Emitter.getPackageName(parser);
+        String baseName = Emitter.getBaseName("dfa-big") + ".dot";
+        String fullName = Emitter.getPathName(packageName, baseName);
+        File outputFile = Emitter.normalize(fullName, inputFile);
+        dfa.writeDot(outputFile); // $NON-NLS-1$
+      }
 
       Out.checkErrors();
 
@@ -107,12 +122,25 @@ public class LexGenerator {
 
       if (Options.dump) Out.dump(ErrorMessages.get(ErrorMessages.MIN_DFA_IS) + Out.NL + dfa);
 
-      if (Options.dot) dfa.writeDot(Emitter.normalize("dfa-min.dot", null)); // $NON-NLS-1$
+      if (Options.dot) {
+        String packageName = Emitter.getPackageName(parser);
+        String baseName = Emitter.getBaseName("dfa-min") + ".dot";
+        String fullName = Emitter.getPathName(packageName, baseName);
+        File outputFile = Emitter.normalize(fullName, inputFile);
+        dfa.writeDot(outputFile);
+      }
 
       time.start();
 
       Emitter emitter = Emitters.createFileEmitter(inputFile, parser, dfa);
       emitter.emit();
+
+      if (Options.mode == Mode.MAP) {
+        MappingEmitter mappingEmitter = Emitters.createFileMappings(inputFile, parser, dfa, nfa);
+        mappingEmitter.emit();
+      }
+
+      Out.closeDumpFile();
 
       time.stop();
 

@@ -14,9 +14,12 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import jflex.base.Build;
+import jflex.core.LexParse;
 import jflex.exceptions.GeneratorException;
+import jflex.generator.Emitter;
 import jflex.l10n.ErrorMessages;
 import jflex.option.Options;
 import jflex.performance.Timer;
@@ -51,6 +54,9 @@ public final class Out {
   /** output device */
   private static StdOutWriter out = new StdOutWriter();
 
+  /** dump file if needed */
+  private static PrintWriter dumpfile = null;
+
   /**
    * Switches to GUI mode if {@code text</code> is not <code>null}
    *
@@ -68,6 +74,30 @@ public final class Out {
   public static void setOutputStream(OutputStream stream) {
     out = new StdOutWriter(stream);
     out.setGUIMode(null);
+  }
+
+  public static void createDumpFile(LexParse parser, File input) {
+    if (Options.dump && Options.dumpfile) {
+      String packageName = Emitter.getPackageName(parser);
+      String baseName = Emitter.getBaseName(parser.scanner.className()) + ".dump";
+      String fullName = Emitter.getPathName(packageName, baseName);
+      File outputFile = Emitter.normalize(fullName, input);
+      try {
+        dumpfile = new PrintWriter(outputFile);
+        Out.println("Dumping tables to \"" + outputFile + "\"");
+      } catch (Exception e) {
+      }
+    }
+  }
+
+  public static void closeDumpFile() {
+    if (Options.dump && Options.dumpfile && dumpfile != null) {
+      try {
+        dumpfile.close();
+      } catch (Exception e) {
+      }
+    }
+    dumpfile = null;
   }
 
   /**
@@ -161,8 +191,13 @@ public final class Out {
    * @param message the message to be printed
    */
   public static void dump(String message) {
-    if (Options.dump) {
+    // standard way
+    if (Options.dump && !Options.dumpfile) {
       out.println(message);
+    }
+    // saves messages to a file near the generated scanner
+    if (Options.dump && Options.dumpfile && dumpfile != null) {
+      dumpfile.println(message);
     }
   }
 

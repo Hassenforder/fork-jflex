@@ -144,6 +144,11 @@ public final class NFA {
     return numStates;
   }
 
+  // to be allowed to extract initial regexps
+  public RegExps getRegExps() {
+    return regExps;
+  }
+
   /** Returns the set of states that can be reached from currentState with an input nextChar. */
   public StateSet reachableStates(int currentState, int nextChar) {
     return table[currentState][nextChar];
